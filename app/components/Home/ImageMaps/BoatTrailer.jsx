@@ -6,8 +6,8 @@ const BoatTrailer = () => {
   const { globalState } = useGlobalContext();
   const { initialData, isLoading, error } = globalState;
   const app = initialData?.menu;
-
-  if (isLoading) {
+  
+    if (isLoading) {
     return <p>Loading...</p>;
   }
 
@@ -38,17 +38,17 @@ const BoatTrailer = () => {
           style={{ objectFit: 'cover' }} 
           priority
         />
-        <Link
-          data-toggle="tooltip"
-          data-placement="bottom"
-          data-original-title={app?.buildmenu?.groupsflat?.[197753]?.name}
-          href={`/`}
-          className="plus-blue sonar"
-          style={{ top: "66%", left: "56%" }}
-        >
-          <i className="fa fa-plus" aria-hidden="true"></i>
-        </Link>
-        <Link
+                    <Link
+                            data-toggle="tooltip"
+              data-placement="bottom"
+              data-original-title={app?.buildmenu?.groupsflat?.[197753]?.name}
+              href={`/`}
+              className="plus-blue sonar"
+              style={{ top: "66%", left: "56%" }}
+            >
+              <i className="fa fa-plus" aria-hidden="true"></i>
+            </Link>
+          <Link
           data-toggle="tooltip"
           data-placement="bottom"
           data-original-title={app?.buildmenu?.groupsflat?.[197773]?.name}

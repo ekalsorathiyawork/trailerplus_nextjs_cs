@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import DOMPurify from "dompurify";
 import { useGlobalContext } from "@/app/context/GlobalContext";
-import { Fragment, useMemo } from "react";
 
 const Brands = () => {
   const { globalState } = useGlobalContext();
@@ -19,38 +18,6 @@ const Brands = () => {
       ? DOMPurify.sanitize(brandContent)
       : brandContent
     : "";
-  // Helper to generate slides
-  // const generateWrappedSlides = (brandsArray, startIndex) => {
-  //   const total = brandsArray.length;
-  //   const row1 = [];
-  //   const row2 = [];
-  //   for (let i = 0; i < 10; i++) {
-  //     // Calculate the wrapped index for each row
-  //     row1.push(brandsArray[(startIndex + i * 2) % total]);
-  //     row2.push(brandsArray[(startIndex + i * 2 + 1) % total]);
-  //   }
-  //   return { row1, row2 };
-  // };
-
-  // const [startIndex, setStartIndex] = useState(0); // Current start index for sliding
-  // const [currentSlides, setCurrentSlides] = useState(
-  //   generateWrappedSlides(brands, 0)
-  // );
-
-  // Autoplay logic to slide every 2 seconds
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setStartIndex((prevIndex) => prevIndex + 2); // Increment index by 2
-  //   }, 2000);
-
-  //   return () => clearInterval(interval); // Cleanup interval on unmount
-  // }, [brands.length]);
-
-  // Update slides whenever the startIndex changes
-  // useEffect(() => {
-  //   setCurrentSlides(generateWrappedSlides(brands, startIndex));
-  // }, [startIndex]);
-
   const groupedBrands = brands.reduce((acc, brand, index, array) => {
     if (index % 2 === 0) {
       const pair = array.slice(index, index + 2);

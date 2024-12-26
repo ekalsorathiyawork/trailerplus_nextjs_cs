@@ -49,12 +49,6 @@ const Banner = () => {
                       signup
                     </Link>
                   </div>
-
-                  {/* <div className="col-xs-12 col-sm-6">
-                    <a className="white" href="/signup">
-                      more information
-                    </a>
-                  </div> */}
                 </div>
               </div>
             </div>

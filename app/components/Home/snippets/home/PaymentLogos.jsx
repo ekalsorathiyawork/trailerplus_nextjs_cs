@@ -24,39 +24,39 @@ const PaymentLogos = () => {
         <Image
           className="tp-paymentlogos"
           src={"/images/tp-pay-logo/mastercard.webp"}
-          width="40"
-          height="40"
+          width={40}
+          height={40}
           alt="Mastercard"
         />
 
         <Image
           className="tp-paymentlogos"
           src={"/images/tp-pay-logo/visa.webp"}
-          width="40"
-          height="40"
+          width={40}
+          height={40}
           alt="Visa"
         />
 
         <Image
           className="tp-paymentlogos"
           src={"/images/tp-pay-logo/maestro-card.webp"}
-          width="40"
-          height="40"
+          width={40}
+          height={40}
           alt="Maestro"
         />
         <Image
           className="tp-paymentlogos"
           src={"/images/tp-pay-logo/iDEAL_in3.png"}
-          width="40"
-          height="40"
+          width={40}
+          height={40}
           alt="iDeal"
         />
 
         <Image
           className="tp-paymentlogos"
           src={"/images/tp-pay-logo/paypal.webp"}
-          width="40"
-          height="40"
+          width={40}
+          height={40}
           alt="PayPal"
         />
       </Link>

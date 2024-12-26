@@ -19,7 +19,6 @@ const Header = () => {
     // Set up affix behavior
     if (navElement) {
       const handleAffix = () => {
-        // console.log("scroll", window.scrollY, headerHeight);
         if (window.scrollY >= headerHeight - 100) {
           document.body.classList.add("affixed");
           setMenuHeader("affix");
@@ -154,25 +153,9 @@ const Header = () => {
                     &nbsp;Contact
                   </Link>
                 </li>
-                {/* <li>
-                  <Link href="/logout">Logout</Link>
-                </li>
-                <li>
-                  <Link href="/account">My Account</Link>
-                </li>
-                <li>
-                  <Link href="/wishlist">Wishlist</Link>
-                </li> */}
               </ul>
 
               <ul className="services-right">
-                {/* <li className="block admin">
-                  <Link href="/admin">
-                    <span className="adminname">Admin</span>
-                    <i className="fa fa-cogs" aria-hidden="true"></i>
-                  </Link>
-                </li> */}
-
                 <li className="block callus" style={{ display: "none" }}>
                   <Link href="tel:+31528854443">
 
@@ -184,13 +167,6 @@ const Header = () => {
                   className="trustedshops"
                   // onClick="window.open('trustedshoplink', '_blank');"
                 ></li>
-
-                {/* <li className="block orders">
-                  <Link href="/orders">
-                    <span className="ordersname">My Orders</span>
-                    <i className="fa fa-user" aria-hidden="true"></i>
-                  </Link>
-                </li> */}
                 <li className="block newcustomer">
                   <Link title="newcustomer" href="/">
                     New Customer

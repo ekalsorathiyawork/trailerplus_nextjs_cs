@@ -1,4 +1,4 @@
-// import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
@@ -63,7 +63,7 @@ export default async function RootLayout({ children }) {
           )}
           <Footer />
         </GlobalProvider>
-        {/* <SpeedInsights /> */}
+        <SpeedInsights />
       </body>
     </html>
   );

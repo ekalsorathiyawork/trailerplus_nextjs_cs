@@ -5,9 +5,8 @@ import { useGlobalContext } from "@/app/context/GlobalContext";
 import Image from "next/image";
 
 const Footer = () => {
-  const [locale, setLocale] = useState("en"); // Assuming locale is dynamically determined elsewhere.
   const { globalState } = useGlobalContext();
-  const { initialData, isLoading, error } = globalState;
+  const { initialData, isLoading, error, language } = globalState;
   const [isOpen, setIsOpen] = useState(false); // Dropdown state
   const [expandedSections, setExpandedSections] = useState({
     customerService: false,
@@ -84,7 +83,7 @@ const Footer = () => {
                 }
                 onClick={() => toggleSection("customerService")}
               >
-                {locale === "fr" ? "Marques populaires" : "Customer Service"}
+                Customer Service
               </b>
               <ul
                 className={`pages ${
@@ -101,7 +100,7 @@ const Footer = () => {
                 className={expandedSections.information ? "is-expanded" : ""}
                 onClick={() => toggleSection("information")}
               >
-                {locale === "fr" ? "Marques populaires" : "Information"}
+                Information
               </b>
               <ul
                 className={`pages ${
@@ -118,7 +117,7 @@ const Footer = () => {
                 className={expandedSections.tipsAndTricks ? "is-expanded" : ""}
                 onClick={() => toggleSection("tipsAndTricks")}
               >
-                {locale === "fr" ? "Marques populaires" : "Tips and Tricks"}
+                Tips and Tricks
               </b>
               <ul
                 className={`pages ${
@@ -133,11 +132,11 @@ const Footer = () => {
             <div className="col-xs-12 hidden-lg spacer"></div>
 
             {/* Optional Shop Data Section */}
-            {app?.shopdata?.adiv?.[1]?.[locale]?.[82]?.content && (
+            {app?.shopdata?.adiv?.[1]?.[language]?.[82]?.content && (
               <div className="col-xs-12 col-sm-6 col-md-5 col-md-offset-1 col-lg-3 col-lg-offset-0 address">
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: app?.shopdata?.adiv?.[1]?.[locale]?.[82]?.content,
+                    __html: app?.shopdata?.adiv?.[1]?.[language]?.[82]?.content,
                   }}
                 />
               </div>
