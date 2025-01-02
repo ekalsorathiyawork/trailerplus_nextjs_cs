@@ -6,10 +6,8 @@ import axios from "axios";
 
 const ProductGroups = () => {
   const [app, setApp] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const swiperInstances = useRef({}); // Using useRef to avoid unnecessary re-renders
+  const swiperInstances = useRef({});
 
-  // Memoize popular products to prevent unnecessary re-calculations on re-renders
   const popularProducts = useMemo(() => {
     return (
       app?.buildmenu?.groups?.find((group) => group.id === 197728)?.children || []
@@ -42,14 +40,13 @@ const ProductGroups = () => {
     const width = document.documentElement.clientWidth;
 
     swipers.forEach((el, index) => {
-      // Check if the element is visible or should be initialized
       if (
         isVisible ||
         el.classList.contains("brandbar") ||
         el.classList.contains("populargroups") ||
         el.classList.contains("trailer_swiper")
       ) {
-        if (!swiperInstances.current[index]) { // Check if swiper instance doesn't already exist
+        if (!swiperInstances.current[index]) { 
           addSwiperClasses(el);
 
           let swiperOptions = {
@@ -58,7 +55,6 @@ const ProductGroups = () => {
             draggable: true,
           };
 
-          // Customize swiperOptions based on class or conditions
           if (el.classList.contains("swiper-products")) {
             swiperOptions.slidesPerView = 2;
             swiperOptions.spaceBetween = 5;
@@ -103,7 +99,7 @@ const ProductGroups = () => {
   };
 
   useEffect(() => {
-    const fetchFooter = async () => {
+    const fetchPopularGroups = async () => {
       try {
         const response = await axios.get("/services/buildMenu");
         const appData = response.data.data;
@@ -113,14 +109,12 @@ const ProductGroups = () => {
         document.body.appendChild(script);
         
         setApp(appData);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error.message);
-        setIsLoading(false);
       }
     };
     
-    fetchFooter();
+    fetchPopularGroups();
 
     window.addEventListener("resize", initSwipers);
     return () => {
@@ -128,10 +122,6 @@ const ProductGroups = () => {
     };
   }, []);
 
-  // Loading state
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
 
   return (
     <>
@@ -161,7 +151,6 @@ const ProductGroups = () => {
                             }}
                           >
                             {product.mediaid && (
-                              // Lazy load images, removing priority if not necessary
                               <Image
                                 src={`https://www.trailerplus.eu/media/${product.mediaid}/125/${product.medianame}`}
                                 alt={product.name}

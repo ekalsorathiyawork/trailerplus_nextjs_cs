@@ -9,13 +9,12 @@ const PopularProducts = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchFooter = async () => {
+    const fetchPopularProducts = async () => {
       try {
-        const response = await axios.get("/services/buildMenu"); // Use your API route
+        const response = await axios.get("/services/buildMenu");
         const appData = response.data.data;
 
         if (appData && typeof appData === 'object') {
-          // Prevent unnecessary updates if the data hasn't changed
           if (app?.homepage?.populairproducts !== appData?.homepage?.populairproducts) {
             setApp(appData);
           } else {
@@ -32,7 +31,7 @@ const PopularProducts = () => {
       }
     };
 
-    fetchFooter();
+    fetchPopularProducts();
   }, []);
 
   const popularProductIds = app?.homepage?.populairproducts || [];
@@ -61,10 +60,6 @@ const PopularProducts = () => {
 
     fetchProducts();
   }, [popularProductIds]);
-
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
 
   return (
     <section className="productsv2 light popularproducts">

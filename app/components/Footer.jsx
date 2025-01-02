@@ -1,17 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-// import { useGlobalContext } from "@/app/context/GlobalContext";
 import Image from "next/image";
 import axios from "axios";
 
 const Footer = () => {
-  // const { globalState } = useGlobalContext();
-  // const { initialData, isLoading, error, language } = globalState;
   const [app, setApp] = useState();
   const [pages, setPages] = useState();
-  const [isOpen, setIsOpen] = useState(false); // Dropdown state
-  const [isLoading, setIsLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false); 
   const [expandedSections, setExpandedSections] = useState({
     customerService: false,
     information: false,
@@ -19,37 +15,26 @@ const Footer = () => {
   });
   const language = "en";
 
-  // const app = initialData?.menu;
-  // const pages = initialData?.menu?.buildmenu?.pages || [];
-
   useEffect(() => {
     const fetchFooter = async () => {
       try {
-        const response = await axios.get("/services/buildMenu"); // Use your own API route
+        const response = await axios.get("/services/buildMenu");
         const appData = response.data.data;
         setApp(appData);
         const pageData = appData.buildmenu.pages;
         setPages(pageData);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error.message);
-        setIsLoading(false);
       }
     };
 
     fetchFooter();
   }, []);
 
-  // Determine trusted shop
   const trustedShop =
     app?.shopdata?.apps?.[100025]?.function === "trustedshops"
       ? app?.shopdata?.apps?.[100025]?.cache?.channels?.find(
           (channel) =>
-            /**
-             * Commented due to domain not match
-             * Provided API domain: www.trustedshops.at
-             * channel.url === hostname &&
-             */
             channel?.aggregaterating?.overall
         )
       : null;
@@ -142,11 +127,6 @@ const Footer = () => {
                 {renderPages(3)}
               </ul>
             </div>
-
-            {/* Spacer */}
-            {/* <div className="col-xs-12 hidden-lg spacer"></div> */}
-
-            {/* Optional Shop Data Section */}
             {app?.shopdata?.adiv?.[1]?.[language]?.[82]?.content && (
               <div className="col-xs-12 col-sm-6 col-md-5 col-md-offset-1 col-lg-3 col-lg-offset-0 address">
                 <div

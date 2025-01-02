@@ -9,9 +9,9 @@ const Banner = () => {
   const [isLoading, setIsLoading] = useState(true);
   const language = "en";
   useEffect(() => {
-    const fetchFooter = async () => {
+    const fetchBanner = async () => {
       try {
-        const response = await axios.get("/services/buildMenu"); // Use your own API route
+        const response = await axios.get("/services/buildMenu");
         const appData = response.data.data;
         setApp(appData);
         setIsLoading(false);
@@ -21,7 +21,7 @@ const Banner = () => {
       }
     };
 
-    fetchFooter();
+    fetchBanner();
   }, []);
 
   const content =

@@ -9,8 +9,8 @@ const Brands = () => {
   const [app, setApp] = useState();
   const [brands, setBrands] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const language = "eu";
-    const swiperInstances = useRef({}); // Using useRef to avoid unnecessary re-renders
+  const language = "en";
+  const swiperInstances = useRef({});
   
 
   const addSwiperClasses = (swiperElement) => {
@@ -39,14 +39,13 @@ const Brands = () => {
     const width = document.documentElement.clientWidth;
 
     swipers.forEach((el, index) => {
-      // Check if the element is visible or should be initialized
       if (
         isVisible ||
         el.classList.contains("brandbar") ||
         el.classList.contains("populargroups") ||
         el.classList.contains("trailer_swiper")
       ) {
-        if (!swiperInstances.current[index]) { // Check if swiper instance doesn't already exist
+        if (!swiperInstances.current[index]) { 
           addSwiperClasses(el);
 
           let swiperOptions = {
@@ -54,8 +53,6 @@ const Brands = () => {
             spaceBetween: 15,
             draggable: true,
           };
-
-          // Customize swiperOptions based on class or conditions
           if (el.classList.contains("swiper-products")) {
             swiperOptions.slidesPerView = 2;
             swiperOptions.spaceBetween = 5;
@@ -100,7 +97,7 @@ const Brands = () => {
   };
 
   useEffect(() => {
-    const fetchFooter = async () => {
+    const fetchBrands = async () => {
       try {
         const response = await axios.get("/services/buildMenu"); // Use your own API route
         const appData = response.data.data;
@@ -121,7 +118,7 @@ const Brands = () => {
       }
     };
 
-    fetchFooter();
+    fetchBrands();
     window.addEventListener("resize", initSwipers);
     return () => {
       window.removeEventListener("resize", initSwipers);
@@ -129,21 +126,13 @@ const Brands = () => {
   }, []);
 
   const content =
-    app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[112]?.content;
+    app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[127]?.content;
 
   const sanitizedContent = content
     ? typeof window !== "undefined"
       ? DOMPurify.sanitize(content)
       : content
     : "";
-  // const brandContent =
-  //   app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[127]?.content;
-  // const sanitizedBrandContent = brandContent
-  //   ? typeof window !== "undefined"
-  //     ? DOMPurify.sanitize(brandContent)
-  //     : brandContent
-  //   : "";
-
   const groupedBrands = brands.reduce((acc, brand, index, array) => {
     if (index % 2 === 0) {
       const pair = array.slice(index, index + 2);
@@ -153,54 +142,6 @@ const Brands = () => {
     }
     return acc;
   }, []);
-
-  // const brandContent =
-  //   app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[127]?.content;
-
-  //   console.log("Brand Content",brandContent);
-
-  // const sanitizedBrandContent = brandContent
-  //   ? typeof window !== "undefined"
-  //     ? DOMPurify.sanitize(brandContent)
-  //     : brandContent
-  //   : "";
-
-  // const groupedBrands = brands.reduce((acc, brand, index, array) => {
-  //     if (index % 2 === 0) {
-  //       const pair = array.slice(index, index + 2);
-  //       if (pair.length > 0) {
-  //         acc.push(pair);
-  //       }
-  //     }
-  //     return acc;
-  //   }
-  //   , []);
-  // const brands = Object.values(initialData?.menu?.buildmenu?.brands || []);
-  // const brandContent = response?.data?.data?.shopdata?.adiv?.[initialData?.menu?.shopdata?.siteid]?.[
-  //     language
-  //   ]?.[127]?.content;
-  // const sanitizedBrandContent = brandContent
-  //   ? typeof window !== "undefined"
-  //     ? DOMPurify.sanitize(brandContent)
-  //     : brandContent
-  //   : "";
-  // const groupedBrands = brands.reduce((acc, brand, index, array) => {
-  //   if (index % 2 === 0) {
-  //     const pair = array.slice(index, index + 2);
-  //     if (pair.length > 0) {
-  //       acc.push(pair);
-  //     }
-  //   }
-  //   return acc;
-  // }, []);
-
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // if (error) {
-  //   return <p style={{ color: "red" }}>Error: {error}</p>;
-  // }
   return (
     <>
       <section className="brands">
@@ -212,7 +153,6 @@ const Brands = () => {
             </div>
           </div>
         </div>
-
         <div className="container">
           <div className="row" style={{ overflow: "hidden" }}>
             <div className="brandbar swiper_init swiper-main">
@@ -250,7 +190,6 @@ const Brands = () => {
           </div>
         </div>
       </section>
-      
     </>
   );
 };

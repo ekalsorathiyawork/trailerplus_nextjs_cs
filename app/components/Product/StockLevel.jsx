@@ -1,10 +1,7 @@
-// import { useGlobalContext } from "@/app/context/GlobalContext";
 import Link from "next/link";
 import React from "react";
 
 const StockLevel = ({ product }) => {
-  // const { globalState } = useGlobalContext();
-  // const { language } = globalState;
   const language = "en";
   const days = {
     1: "monday",
