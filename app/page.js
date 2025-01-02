@@ -1,129 +1,17 @@
 "use client";
-import { useState, useEffect } from "react";
 
-import ImageMaps from "@/app/components/Home/ImageMaps";
-import Banner from "@/app/components/Home/Banner";
-import PopularGroups from "@/app/components/Home/PopularGroups";
-// import Blog from "@/app/components/Home/Blog";
-import PopularProducts from "@/app/components/Home/PopularProducts";
-import Brands from "@/app/components/Home/Brands";
-
+import { useEffect, useState } from "react";
+import Brands from "./components/Home/Brands";
 import "@/public/css/swiper-bundle.min.css";
-
-
 import "@/public/css/responsive-brand-logo-carousel.min.css";
+import Banner from "./components/Home/Banner";
+import PopularProducts from "./components/Home/PopularProducts";
+import ProductGroups from "./components/Home/PopularGroups";
+import ImageMaps from "./components/Home/ImageMaps";
 
-export default function App() {
-  const [swiperInstances, setSwiperInstances] = useState({});
+export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
 
-  const addSwiperClasses = (swiperElement) => {
-    swiperElement.classList.add("swiper");
-    swiperElement
-      .querySelector(".swiper-wrapper_init")
-      ?.classList.add("swiper-wrapper");
-    swiperElement
-      .querySelectorAll(".swiper-slide_init")
-      ?.forEach((slide) => slide.classList.add("swiper-slide"));
-  };
-
-  const removeSwiperClasses = (swiperElement) => {
-    swiperElement.classList.remove("swiper");
-    swiperElement
-      .querySelector(".swiper-wrapper_init")
-      ?.classList.remove("swiper-wrapper");
-    swiperElement
-      .querySelectorAll(".swiper-slide_init")
-      ?.forEach((slide) => slide.classList.remove("swiper-slide"));
-  };
-
-  const initSwipers = () => {
-    const swipers = document.querySelectorAll(".swiper_init");
-    const isVisible = window.innerWidth <= 768;
-    const width = document.documentElement.clientWidth;
-
-    swipers.forEach((el, index) => {
-      if (
-        isVisible ||
-        el.classList.contains("brandbar") ||
-        el.classList.contains("populargroups") ||
-        el.classList.contains("trailer_swiper")
-      ) {
-        if (!swiperInstances[index]) {
-          addSwiperClasses(el);
-
-          let swiperOptions = {
-            slidesPerView: "auto",
-            spaceBetween: 15,
-            draggable: true,
-            // scrollbar: {
-            //   el: ".swiper-scrollbar",
-            //   draggable: true,
-            // },
-          };
-
-          if (el.classList.contains("swiper-products")) {
-            swiperOptions.slidesPerView = 2;
-            swiperOptions.spaceBetween = 5;
-          } else if (el.classList.contains("trailer_swiper") && width > 1200) {
-            swiperOptions.slidesPerView = 2.5;
-            swiperOptions.spaceBetween = 15;
-          } else if (el.classList.contains("brandbar")) {
-            swiperOptions.autoplay = { delay: 3000 };
-            swiperOptions.loop = true;
-            swiperOptions.breakpoints = {
-              300: { slidesPerView: 5, spaceBetween: 60 },
-              678: { slidesPerView: 10, spaceBetween: 60 },
-            };
-          } else if (el.classList.contains("populargroups")) {
-            swiperOptions.navigation = {
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            };
-          }
-
-          if (window.Swiper) {
-            swiperInstances[index] = new window.Swiper(el, swiperOptions);
-          } else {
-            console.error("Swiper is not available on window.");
-          }
-
-          el.querySelector(".fa-spinner")?.remove();
-          el.querySelector(".swiper-wrapper_init")?.classList.remove(
-            "swiper_onload"
-          );
-
-          setSwiperInstances({ ...swiperInstances });
-        }
-      } else {
-        Object.keys(swiperInstances).forEach((key) => {
-          if (swiperInstances[key] !== undefined) {
-            removeSwiperClasses(el);
-            swiperInstances[key].destroy(true, true);
-            swiperInstances[key] = undefined;
-            setSwiperInstances({ ...swiperInstances });
-          }
-        });
-      }
-    });
-  };
-
-  useEffect(() => {
-    const loadSwiper = () => {
-      const script = document.createElement("script");
-      script.src = "/js/swiper-bundle.min.js";
-      script.onload = () => initSwipers();
-      document.body.appendChild(script);
-    };
-
-    loadSwiper();
-    window.addEventListener("resize", initSwipers);
-    return () => {
-      window.removeEventListener("resize", initSwipers);
-    };
-  }, [swiperInstances]);
-
-  // Check if the user has scrolled past a certain threshold
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 300) {
@@ -146,7 +34,6 @@ export default function App() {
       behavior: "smooth",
     });
   };
-
   return (
     <>
       <div
@@ -160,21 +47,10 @@ export default function App() {
         <i style={{ color: "#0182C5" }} className="fa fa-arrow-up fa-2x"></i>
       </div>
       <ImageMaps />
-      <PopularGroups />
-      {/* <Blog /> */}
-      <PopularProducts />
-      <section className="tyres-homepage">
-        <div className="container">
-          {/**
-           * NOTE:: Page not exist in provided zip
-           * '/pages/trailerplus-dev/tyres/include.twig'
-           */}
-        </div>
-      </section>
-
+      <ProductGroups />
+      <PopularProducts/>
       <Banner />
       <Brands />
-
       <style jsx global>
         {`
           .swiper-main.populargroups .swiper-slide {

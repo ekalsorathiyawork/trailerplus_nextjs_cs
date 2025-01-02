@@ -1,23 +1,32 @@
 "use client";
-import { useGlobalContext } from "@/app/context/GlobalContext";
 import DOMPurify from "dompurify";
 import Link from "next/link";
-import React from "react";
-const Banner = () => {
-  const { globalState } = useGlobalContext();
-  const { initialData, isLoading, error, language } = globalState;
-  const app = initialData?.menu;
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-  if (error) {
-    return <p style={{ color: "red" }}>Error: {error}</p>;
-  }
+const Banner = () => {
+  const [app, setApp] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const language = "en";
+  useEffect(() => {
+    const fetchFooter = async () => {
+      try {
+        const response = await axios.get("/services/buildMenu"); // Use your own API route
+        const appData = response.data.data;
+        setApp(appData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchFooter();
+  }, []);
 
   const content =
     app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[112]?.content;
-
+  
   const sanitizedContent = content
     ? typeof window !== "undefined"
       ? DOMPurify.sanitize(content)
@@ -26,7 +35,12 @@ const Banner = () => {
 
   return (
     <>
-      <div className="parallax-window hidden-xs">
+      <div className="hidden-xs" 
+      style={{background: "url(/images/banner.webp)",
+        backgroundSize: "cover",
+        height: "300px",
+        width: "100%",
+        aspectRatio: "16 / 9"}}>
         <section className="banner">
           <div className="container">
             <div className="row">

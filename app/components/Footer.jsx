@@ -1,21 +1,44 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useGlobalContext } from "@/app/context/GlobalContext";
+// import { useGlobalContext } from "@/app/context/GlobalContext";
 import Image from "next/image";
+import axios from "axios";
 
 const Footer = () => {
-  const { globalState } = useGlobalContext();
-  const { initialData, isLoading, error, language } = globalState;
+  // const { globalState } = useGlobalContext();
+  // const { initialData, isLoading, error, language } = globalState;
+  const [app, setApp] = useState();
+  const [pages, setPages] = useState();
   const [isOpen, setIsOpen] = useState(false); // Dropdown state
+  const [isLoading, setIsLoading] = useState(true);
   const [expandedSections, setExpandedSections] = useState({
     customerService: false,
     information: false,
     tipsAndTricks: false,
   });
+  const language = "en";
 
-  const app = initialData?.menu;
-  const pages = initialData?.menu?.buildmenu?.pages || [];
+  // const app = initialData?.menu;
+  // const pages = initialData?.menu?.buildmenu?.pages || [];
+
+  useEffect(() => {
+    const fetchFooter = async () => {
+      try {
+        const response = await axios.get("/services/buildMenu"); // Use your own API route
+        const appData = response.data.data;
+        setApp(appData);
+        const pageData = appData.buildmenu.pages;
+        setPages(pageData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchFooter();
+  }, []);
 
   // Determine trusted shop
   const trustedShop =
@@ -62,18 +85,10 @@ const Footer = () => {
     }));
   };
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p style={{ color: "red" }}>Error: {error}</p>;
-  }
-
   return (
     <>
       <section className="service-footer">
-        <div className="container">
+        <div className="container" style={{ minHeight: "150px" }}>
           <div className="row">
             {/* Customer Service Section */}
             <div className="col-xs-12 col-sm-6 col-md-5 col-md-offset-1 col-lg-3 col-lg-offset-0 collapsable">
@@ -129,7 +144,7 @@ const Footer = () => {
             </div>
 
             {/* Spacer */}
-            <div className="col-xs-12 hidden-lg spacer"></div>
+            {/* <div className="col-xs-12 hidden-lg spacer"></div> */}
 
             {/* Optional Shop Data Section */}
             {app?.shopdata?.adiv?.[1]?.[language]?.[82]?.content && (
@@ -142,6 +157,11 @@ const Footer = () => {
               </div>
             )}
           </div>
+        </div>
+      </section>
+
+      <section className="service-footer">
+        <div className="container" style={{ minHeight: "50px" }}>
           <div className="row">
             <div className="col-xs-12">
               <ul className="list-unstyled tpglobal">
@@ -297,7 +317,7 @@ const Footer = () => {
                       className={`flag-icon flag-icon-${item?.country}`}
                     ></span>
                     <Link
-                      href={"/"}
+                      href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -310,16 +330,13 @@ const Footer = () => {
           </div>
         </div>
       </section>
-
       <footer>
         <div className="container-fluid">
           <div className="row">
             <div className="col-xs-12 col-lg-push-8 col-lg-4">
               <ul className="terms_conditions">
                 <li>
-                  <Link href="/">
-                    terms and conditions
-                  </Link>
+                  <Link href="/">terms and conditions</Link>
                 </li>
                 <li>
                   <span> | </span>
@@ -331,14 +348,22 @@ const Footer = () => {
             </div>
             <div className="brand-column col-xs-12 col-lg-pull-4 col-lg-8">
               <div className="branding">
-                <Link href="/">
+                <Link
+                  rel="preload"
+                  href="/"
+                  as="image"
+                  type="image/webp"
+                  crossOrigin="anonymous"
+                >
                   <Image
                     alt="trailer-plus-logo-footer.webp"
                     src="/images/trailer-plus-logo-footer.webp"
-                    width="158"
-                    height="30"
+                    width={158}
+                    height={30}
+                    loading="lazy"
                   />
                 </Link>
+
                 <div
                   className="socials"
                   style={{ display: "inlineFlex", justifyContent: "center" }}
@@ -383,10 +408,7 @@ const Footer = () => {
                     </Link>
                   }
                   <span style={{ fontSize: "7px" }}>
-                    <Link
-                      href="https://onetoshop.com/"
-                      target="_blank"
-                    >
+                    <Link href="https://onetoshop.com/" target="_blank">
                       Onetoshop.com
                     </Link>
                   </span>

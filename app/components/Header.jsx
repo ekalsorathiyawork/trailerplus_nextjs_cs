@@ -3,13 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-import { useGlobalContext } from "@/app/context/GlobalContext";
+import axios from "axios";
+
+// import { useGlobalContext } from "@/app/context/GlobalContext";
 
 const Header = () => {
-  const { globalState } = useGlobalContext();
-  const { initialData, isLoading, error, language } = globalState;
+  // const { globalState } = useGlobalContext();
+  // const { initialData, isLoading, error, language } = globalState;
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [menuHeader, setMenuHeader] = useState("affix-top");
+  const [app, setApp] = useState();
+  const language = "en";
 
   useEffect(() => {
     const navElement = document.getElementById("nav");
@@ -31,6 +35,17 @@ const Header = () => {
           setMenuHeader("affix-top");
         }
       };
+      const fetchFooter = async () => {
+        try {
+          const response = await axios.get("/services/buildMenu"); // Use your own API route
+          const appData = response.data.data;
+          setApp(appData);
+        } catch (error) {
+          console.error("Error fetching products:", error.message);
+        }
+      };
+  
+      fetchFooter();
 
       window.addEventListener("scroll", handleAffix);
 
@@ -40,15 +55,15 @@ const Header = () => {
     }
   }, []);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
 
-  if (error) {
-    return <p style={{ color: "red" }}>Error: {error}</p>;
-  }
+  // if (error) {
+  //   return <p style={{ color: "red" }}>Error: {error}</p>;
+  // }
 
-  const app = initialData?.menu;
+  // const app = initialData?.menu;
 
   const handleMouseEnter = (id) => {
     setHoveredMenu(id);
@@ -134,9 +149,11 @@ const Header = () => {
                 <Link title="Home" href="/">
                   <Image
                     src={"/images/trailer-plus-logo.png"}
-                    width="267"
-                    height="52"
-                    alt=""
+                    width={267}
+                    height={52}
+                    loading="eager"
+                    alt="trailer-plus-logo.png"
+                    priority 
                   />
                 </Link>
               </li>
@@ -219,9 +236,10 @@ const Header = () => {
                 <Link title="Home" href="/">
                   <Image
                     src={"/images/trailer-plus-logo.png"}
-                    width="267"
-                    height="52"
-                    alt=""
+                    width={267}
+                    height={52}
+                    loading="eager"
+                    alt="trailer-plus-logo.png"
                   />
                 </Link>
               </div>

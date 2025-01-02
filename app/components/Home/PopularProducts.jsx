@@ -1,23 +1,47 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
-import { useGlobalContext } from "@/app/context/GlobalContext";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import ProductsGrid from "../Product/ProductView";
 
 const PopularProducts = () => {
-  const { globalState } = useGlobalContext();
-  const { initialData, isLoading, error } = globalState;
+  const [app, setApp] = useState({});
   const [products, setProducts] = useState([]);
-  const popularProductIds = useMemo(
-    () => initialData?.menu?.homepage?.populairproducts,
-    [initialData?.menu?.homepage?.populairproducts]
-  );
-
-  const app = useMemo(() => initialData?.menu, [initialData?.menu]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const fetchFooter = async () => {
+      try {
+        const response = await axios.get("/services/buildMenu"); // Use your API route
+        const appData = response.data.data;
+
+        if (appData && typeof appData === 'object') {
+          // Prevent unnecessary updates if the data hasn't changed
+          if (app?.homepage?.populairproducts !== appData?.homepage?.populairproducts) {
+            setApp(appData);
+          } else {
+            console.log("No change in app data. Skipping state update.");
+          }
+        } else {
+          console.error("Unexpected appData format:", appData);
+        }
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error.message);
+        setIsLoading(false);
+      }
+    };
+
+    fetchFooter();
+  }, []);
+
+  const popularProductIds = app?.homepage?.populairproducts || [];
+
+  useEffect(() => {
+    if (!popularProductIds || popularProductIds.length === 0) return;
+
     const fetchProducts = async () => {
       try {
-        // Fetch the JSON file from the public/data directory
         const response = await fetch("/data/popularProducts.json");
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -25,9 +49,8 @@ const PopularProducts = () => {
 
         const data = await response.json();
 
-        // Filter the products based on popular product IDs
         const allProducts = Object.values(data.data);
-        const filteredProducts = allProducts.filter((product) =>
+        const filteredProducts = allProducts.filter(product =>
           popularProductIds.includes(product.productid)
         );
         setProducts(filteredProducts);
@@ -36,17 +59,12 @@ const PopularProducts = () => {
       }
     };
 
-    if (popularProductIds.length > 0) {
-      fetchProducts();
-    }
+    fetchProducts();
   }, [popularProductIds]);
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
-  if (error) {
-    return <p style={{ color: "red" }}>Error: {error}</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
 
   return (
     <section className="productsv2 light popularproducts">
