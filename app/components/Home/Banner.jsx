@@ -1,13 +1,14 @@
 "use client";
 import DOMPurify from "dompurify";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
 const Banner = () => {
   const [app, setApp] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const language = "en";
+
   useEffect(() => {
     const fetchFooter = async () => {
       try {
@@ -24,43 +25,49 @@ const Banner = () => {
     fetchFooter();
   }, []);
 
-  const content =
-    app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[112]?.content;
-  
-  const sanitizedContent = content
-    ? typeof window !== "undefined"
+  // UseMemo to avoid unnecessary re-computations of sanitized content
+  const sanitizedContent = useMemo(() => {
+    const content =
+      app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[112]?.content;
+
+    return content
       ? DOMPurify.sanitize(content)
-      : content
-    : "";
+      : "";
+  }, [app]);
+
+  // UseMemo for the label to avoid recomputing it every render
+  const bannerLabel = useMemo(() => {
+    return app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[112]?.label;
+  }, [app]);
+
+  // Early return to avoid unnecessary rendering when loading
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <>
-      <div className="hidden-xs" 
-      style={{background: "url(/images/banner.webp)",
-        backgroundSize: "cover",
-        height: "300px",
-        width: "100%",
-        aspectRatio: "16 / 9"}}>
+      <div
+        className="hidden-xs"
+        style={{
+          background: "url(/images/banner.webp) center/cover no-repeat",
+          height: "300px",
+          width: "100%",
+          aspectRatio: "16 / 9",
+        }}
+      >
         <section className="banner">
           <div className="container">
             <div className="row">
               <div className="col-xs-12 col-md-8 col-md-offset-2">
                 <h2 style={{ textAlign: "center", color: "#fff" }}>
-                  {
-                    app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[
-                      language
-                    ]?.[112]?.label
-                  }
+                  {bannerLabel}
                 </h2>
-                <div
-                  dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-                ></div>
+                <div dangerouslySetInnerHTML={{ __html: sanitizedContent }}></div>
               </div>
               <div className="col-xs-12 col-md-8 col-md-offset-2">
                 <div className="row">
                   <div className="col-xs-12 col-sm-12 text-center">
                     <Link className="orange" href="/">
-                      signup
+                      Signup
                     </Link>
                   </div>
                 </div>
