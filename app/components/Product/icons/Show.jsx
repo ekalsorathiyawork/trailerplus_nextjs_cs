@@ -20,6 +20,8 @@ const PropertyIcons = ({ product }) => {
   ];
   const propertyIds = [812, 4023, 927, 812, 1071, 4081, 7177, 8361];
   let property = null;
+
+  // Determine the property that matches the conditions
   for (const propertyId of propertyIds) {
     const currentProperty = product.properties?.[propertyId];
     if (currentProperty && allowedValues.includes(currentProperty.value)) {
@@ -44,6 +46,7 @@ const PropertyIcons = ({ product }) => {
             let title = "";
             let alt = "";
 
+            // Define image source, title, and alt based on property value
             switch (value.trim()) {
               case "4 x 100":
                 imgSrc = "/images/4-x-100.png";

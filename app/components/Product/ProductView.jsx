@@ -7,11 +7,12 @@ import StockLevel from "./StockLevel";
 
 const ProductsGrid = ({ products, app }) => {
   const [randomNumber, setRandomNumber] = useState(0);
-  const [vatRate, setVatRate] = useState(1); 
+  const [vatRate, setVatRate] = useState(1); // Default VAT rate
 
   useEffect(() => {
     setRandomNumber(Math.floor(Math.random() * 10000) + 1);
 
+    // VAT calculation logic based on provided conditions
     if (products?.myshopid === 250) {
       setVatRate(products.shopdata?.vathigh || 1);
     } else if (products?.myshopid === 4576 && products.userdata?.country) {

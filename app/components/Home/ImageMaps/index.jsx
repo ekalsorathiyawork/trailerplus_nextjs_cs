@@ -1,27 +1,40 @@
 "use client";
 import React from "react";
 import DOMPurify from "dompurify";
+// import { useGlobalContext } from "@/app/context/GlobalContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 const ImageMaps = () => {
+  // const { globalState } = useGlobalContext();
+  // const { initialData, isLoading, error, language } = globalState;
   const [app, setApp] = useState();
-  const language = "en";
+  const [isLoading, setIsLoading] = useState(true);
+  const language = "eu";
 
   useEffect(() => {
-    const fetchImageMaps = async () => {
+    const fetchFooter = async () => {
       try {
         const response = await axios.get("/services/buildMenu"); // Use your own API route
         const appData = response.data.data;
         setApp(appData);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error.message);
+        setIsLoading(false);
       }
     };
-    fetchImageMaps();
+
+    fetchFooter();
   }, []);
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
+
+  // const app = initialData?.menu;
+
   const content =
     app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[91]?.content;
 
@@ -33,12 +46,15 @@ const ImageMaps = () => {
 
   const headerContent =
     app?.shopdata?.adiv?.[app?.shopdata?.siteid]?.[language]?.[87]?.label;
-    
+
   const sanitizedHeaderContent = headerContent
     ? typeof window !== "undefined"
       ? DOMPurify.sanitize(headerContent)
       : headerContent
     : "";
+  // const objects = [197848, 197774, 197776, 197766, 197774, 197809, 197729];
+  // const show = objects.every((object) => app?.buildmenu?.groupsflat?.[object]);
+
   return (
     <>
       <div className="home">
@@ -154,6 +170,7 @@ const ImageMaps = () => {
                             maxHeight: "273px",
                             width: "403px",
                             backgroundImage: `linear-gradient(175deg, rgba(216, 239, 197, 1) 0%, rgba(184, 224, 152, 1) 100%)`,
+                            // backgroundImage: `url(/images/trailer.webp), linear-gradient(175deg, rgba(216, 239, 197, 1) 0%, rgba(184, 224, 152, 1) 100%)`,
                           }}
                         >
                           <Image
@@ -249,6 +266,43 @@ const ImageMaps = () => {
                           >
                             <i className="fa fa-plus" aria-hidden="true"></i>
                           </Link>
+                          {/* {show && (
+                            <>
+                              {objects.map((object, index) => {
+                                const group =
+                                  app?.buildmenu?.groupsflat?.[object];
+
+                                if (!group) return null;
+
+                                const positions = [
+                                  { top: "30%", left: "65%" },
+                                  { top: "50%", left: "30%" },
+                                  { top: "65%", left: "18%" },
+                                  { top: "68%", left: "82%" },
+                                  { top: "44%", left: "3%" },
+                                  { top: "58%", left: "91%" },
+                                  { top: "76%", left: "47%" },
+                                ];
+
+                                return (
+                                  <Link
+                                    key={`${object}-${index}`}
+                                    data-toggle="tooltip"
+                                    data-placement="bottom"
+                                    data-original-title={group?.name}
+                                    href={`/`}
+                                    className="plus-green sonar"
+                                    style={positions?.[index]}
+                                  >
+                                    <i
+                                      className="fa fa-plus"
+                                      aria-hidden="true"
+                                    ></i>
+                                  </Link>
+                                );
+                              })}
+                            </>
+                          )} */}
                         </div>
                       </div>
                       <div className="swiper-slide_init">
@@ -259,6 +313,7 @@ const ImageMaps = () => {
                             overflow: "hidden",
                             maxHeight: "273px",
                             width: "403px",
+                            // background: `url(/images/boottrailer.webp),`,
                           }}
                         >
                           <Image
@@ -352,6 +407,8 @@ const ImageMaps = () => {
                             maxHeight: "273px",
                             width: "403px",
                             backgroundImage: `linear-gradient(175deg, #fed8c3 0%, #ff7d37 100%)`,
+                            // backgroundImage:
+                            //   "url(/images/caravan.webp), linear-gradient(175deg, #fed8c3 0%, #ff7d37 100%)",
                           }}
                         >
                           <Image

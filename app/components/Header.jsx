@@ -4,7 +4,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import axios from "axios";
+
+// import { useGlobalContext } from "@/app/context/GlobalContext";
+
 const Header = () => {
+  // const { globalState } = useGlobalContext();
+  // const { initialData, isLoading, error, language } = globalState;
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [menuHeader, setMenuHeader] = useState("affix-top");
   const [app, setApp] = useState();
@@ -30,16 +35,17 @@ const Header = () => {
           setMenuHeader("affix-top");
         }
       };
-      const fetchHeader = async () => {
+      const fetchFooter = async () => {
         try {
-          const response = await axios.get("/services/buildMenu");
+          const response = await axios.get("/services/buildMenu"); // Use your own API route
           const appData = response.data.data;
           setApp(appData);
         } catch (error) {
           console.error("Error fetching products:", error.message);
         }
       };
-      fetchHeader();
+  
+      fetchFooter();
 
       window.addEventListener("scroll", handleAffix);
 
@@ -49,6 +55,16 @@ const Header = () => {
     }
   }, []);
 
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
+
+  // if (error) {
+  //   return <p style={{ color: "red" }}>Error: {error}</p>;
+  // }
+
+  // const app = initialData?.menu;
+
   const handleMouseEnter = (id) => {
     setHoveredMenu(id);
   };
@@ -57,10 +73,16 @@ const Header = () => {
     setHoveredMenu(null);
   };
 
+  // Determine trusted shop
   const trustedShop =
     app?.shopdata?.apps?.[100025]?.function === "trustedshops"
       ? app?.shopdata?.apps?.[100025]?.cache?.channels?.find(
           (channel) =>
+            /**
+             * Commented due to domain not match
+             * Provided API domain: www.trustedshops.at
+             * channel.url === hostname &&
+             */
             channel?.aggregaterating?.overall
         )
       : null;
